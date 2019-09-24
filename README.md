@@ -18,100 +18,10 @@ It uses an ES6 feature called Generators to make those asynchronous flows easy t
 
 You might've used `redux-thunk` before to handle your data fetching. Contrary to redux thunk, you don't end up in callback hell, you can test your asynchronous flows easily and your actions stay pure.
 
-# Getting started
-
-## Install
-
-```sh
-$ npm install --save redux-saga
-```
-or
-
-```sh
-$ yarn add redux-saga
-```
-
-Alternatively, you may use the provided UMD builds directly in the `<script>` tag of an HTML page. See [this section](#using-umd-build-in-the-browser).
-
-## Usage Example
-
-Suppose we have a UI to fetch some user data from a remote server when a button is clicked. (For brevity, we'll just show the action triggering code.)
-
-```javascript
-class UserComponent extends React.Component {
-  ...
-  onSomeButtonClicked() {
-    const { userId, dispatch } = this.props
-    dispatch({type: 'USER_FETCH_REQUESTED', payload: {userId}})
-  }
-  ...
-}
-```
-
-The Component dispatches a plain Object action to the Store. We'll create a Saga that watches for all `USER_FETCH_REQUESTED` actions and triggers an API call to fetch the user data.
-
-#### `sagas.js`
-
-```javascript
-import { call, put, takeEvery, takeLatest } from 'redux-saga/effects'
-import Api from '...'
-
-// worker Saga: will be fired on USER_FETCH_REQUESTED actions
-function* fetchUser(action) {
-   try {
-      const user = yield call(Api.fetchUser, action.payload.userId);
-      yield put({type: "USER_FETCH_SUCCEEDED", user: user});
-   } catch (e) {
-      yield put({type: "USER_FETCH_FAILED", message: e.message});
-   }
-}
-
-/*
-  Starts fetchUser on each dispatched `USER_FETCH_REQUESTED` action.
-  Allows concurrent fetches of user.
-*/
-function* mySaga() {
-  yield takeEvery("USER_FETCH_REQUESTED", fetchUser);
-}
-
-/*
-  Alternatively you may use takeLatest.
-
-  Does not allow concurrent fetches of user. If "USER_FETCH_REQUESTED" gets
-  dispatched while a fetch is already pending, that pending fetch is cancelled
-  and only the latest one will be run.
-*/
-function* mySaga() {
-  yield takeLatest("USER_FETCH_REQUESTED", fetchUser);
-}
-
-export default mySaga;
-```
-
-To run our Saga, we'll have to connect it to the Redux Store using the `redux-saga` middleware.
-
-#### `main.js`
-
-```javascript
-import { createStore, applyMiddleware } from 'redux'
-import createSagaMiddleware from 'redux-saga'
-
-import reducer from './reducers'
-import mySaga from './sagas'
-
-// create the saga middleware
-const sagaMiddleware = createSagaMiddleware()
-// mount it on the Store
-const store = createStore(
-  reducer,
-  applyMiddleware(sagaMiddleware)
-)
-
-// then run the saga
-sagaMiddleware.run(mySaga)
-
-// render the application
-```
+#Code Review
+./packages/redux-saga实际上没什么代码，只是用来把引用代理到core。
+- [x] [redux-saga](./packages/redux-saga)
+- [ ] [core](./packages/core) 
 
 # Documentation
 
