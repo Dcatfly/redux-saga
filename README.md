@@ -20,7 +20,7 @@ You might've used `redux-thunk` before to handle your data fetching. Contrary to
 
 #Code Review
 ./packages/redux-saga实际上没什么代码，只是用来把引用代理到core。
-- [x] [redux-saga](./packages/redux-saga)
+- [x] [redux-saga](./packages/redux-saga/README.md)
 - [ ] [core](./packages/core) 
 
 # Documentation

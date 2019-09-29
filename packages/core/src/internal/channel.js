@@ -184,6 +184,7 @@ export function multicastChannel() {
   return {
     [MULTICAST]: true,
     put(input) {
+      // 看起来是在put的时候调用了taker，这个taker应该是一个个saga任务
       if (process.env.NODE_ENV !== 'production') {
         checkForbiddenStates()
         check(input, is.notUndef, UNDEFINED_INPUT_ERROR)

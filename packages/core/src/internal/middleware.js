@@ -3,6 +3,8 @@ import { check, assignWithSymbols, createSetContextWarning } from './utils'
 import { stdChannel } from './channel'
 import { runSaga } from './runSaga'
 
+// 这是放入redux middleware的东西，也是redux-saga的default export
+// 看起来是默认用了stdChannel通信
 export default function sagaMiddlewareFactory({ context = {}, channel = stdChannel(), sagaMonitor, ...options } = {}) {
   let boundRunSaga
 
@@ -34,6 +36,7 @@ export default function sagaMiddlewareFactory({ context = {}, channel = stdChann
     if (process.env.NODE_ENV !== 'production' && !boundRunSaga) {
       throw new Error('Before running a Saga, you must mount the Saga middleware on the Store using applyMiddleware')
     }
+    // 为啥不自动run呢
     return boundRunSaga(...args)
   }
 
