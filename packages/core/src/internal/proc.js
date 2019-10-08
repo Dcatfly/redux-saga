@@ -8,6 +8,9 @@ import { asyncIteratorSymbol, noop, shouldCancel, shouldTerminate } from './util
 import newTask from './newTask'
 import * as sagaError from './sagaError'
 
+// 运行saga task的核心方法 感觉好绕。。
+// proc --> next --> digestEffect --> finalRunEffect --> runEffect
+// runEffect中处理effect，如果是iterate就又进了proc，如果不是就进了对应的处理函数effectRunnerMap
 export default function proc(env, iterator, parentContext, parentEffectId, meta, isRoot, cont) {
   if (process.env.NODE_ENV !== 'production' && iterator[asyncIteratorSymbol]) {
     throw new Error("redux-saga doesn't support async generators, please use only regular ones")

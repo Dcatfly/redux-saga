@@ -14,6 +14,7 @@ export function runSaga(
   saga,
   ...args
 ) {
+  // saga就是调用middleware.run时传入的generator函数
   if (process.env.NODE_ENV !== 'production') {
     check(saga, is.func, NON_GENERATOR_ERR)
   }
@@ -59,6 +60,7 @@ export function runSaga(
   let finalizeRunEffect
   if (effectMiddlewares) {
     const middleware = compose(...effectMiddlewares)
+    // effectMiddlewares相当于是一个拦截器
     finalizeRunEffect = runEffect => {
       return (effect, effectId, currCb) => {
         const plainRunEffect = eff => runEffect(eff, effectId, currCb)

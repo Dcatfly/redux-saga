@@ -165,6 +165,7 @@ export function multicastChannel() {
     if (nextTakers !== currentTakers) {
       return
     }
+    // 这里跟redux对事件的处理有点像
     nextTakers = currentTakers.slice()
   }
 
